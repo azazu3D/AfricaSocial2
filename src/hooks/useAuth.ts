@@ -1,23 +1,28 @@
-import { useState, useEffect } from 'react';
-import { User } from 'firebase/auth';
-import { auth } from '../config/firebase';
-import { onAuthStateChanged } from 'firebase/auth';
+import { useEffect } from 'react';
+import { useAuthStore } from '../store/authStore';
+import { authService } from '../services/auth';
 
 export function useAuth() {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { user, isAuthenticated, loading, error } = useAuthStore();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user);
-      setLoading(false);
+    // Écouter les changements d'état d'authentification
+    const unsubscribe = authService.onAuthStateChanged((user) => {
+      if (user) {
+        useAuthStore.setState({ user, isAuthenticated: true, loading: false });
+      } else {
+        useAuthStore.setState({ user: null, isAuthenticated: false, loading: false });
+      }
     });
 
-    return unsubscribe;
+    // Nettoyer l'écouteur lors du démontage
+    return () => unsubscribe();
   }, []);
 
   return {
     user,
+    isAuthenticated,
     loading,
+    error
   };
 } 

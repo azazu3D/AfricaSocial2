@@ -1,0 +1,11 @@
+{
+  "name": "netlify-functions",
+  "version": "1.0.0",
+  "description": "Serverless functions for file management",
+  "main": "index.js",
+  "dependencies": {
+    "@netlify/functions": "^2.0.0",
+    "@types/node": "^18.0.0",
+    "typescript": "^4.9.0"
+  }
+} 

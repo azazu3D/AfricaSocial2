@@ -14,6 +14,7 @@ export type MainTabParamList = {
   Calendar: undefined;
   Inbox: undefined;
   Media: undefined;
+  Files: undefined;
   Profile: undefined;
 };
 

@@ -1,20 +1,23 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView } from 'react-native';
+import React from 'react';
+import { View, Text, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { AuthStackParamList } from '../../navigation/types';
+import { useAuth } from '../../services/auth';
 
 type LoginScreenNavigationProp = NativeStackNavigationProp<AuthStackParamList, 'Login'>;
 
 export default function LoginScreen() {
   const navigation = useNavigation<LoginScreenNavigationProp>();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const { login, loading, error } = useAuth();
 
   const handleLogin = async () => {
-    // TODO: Implement login logic
-    console.log('Login with:', email, password);
+    try {
+      await login();
+    } catch (error) {
+      console.error('Login error:', error);
+    }
   };
 
   return (
@@ -23,50 +26,32 @@ export default function LoginScreen() {
         <View className="p-4">
           <Text className="text-3xl font-bold text-gray-900 mb-8">Welcome Back</Text>
           
-          <View className="space-y-4">
-            <View>
-              <Text className="text-sm font-medium text-gray-700 mb-1">Email</Text>
-              <TextInput
-                className="w-full bg-white border border-gray-300 rounded-lg px-4 py-2"
-                placeholder="Enter your email"
-                value={email}
-                onChangeText={setEmail}
-                keyboardType="email-address"
-                autoCapitalize="none"
-              />
+          {error && (
+            <View className="bg-red-50 p-4 rounded-lg mb-4">
+              <Text className="text-red-500">{error.message}</Text>
             </View>
+          )}
 
-            <View>
-              <Text className="text-sm font-medium text-gray-700 mb-1">Password</Text>
-              <TextInput
-                className="w-full bg-white border border-gray-300 rounded-lg px-4 py-2"
-                placeholder="Enter your password"
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry
-              />
-            </View>
+          <View className="space-y-4">
+            <TouchableOpacity
+              onPress={handleLogin}
+              className="w-full bg-primary py-3 rounded-lg"
+              disabled={loading}
+            >
+              {loading ? (
+                <ActivityIndicator color="white" />
+              ) : (
+                <Text className="text-white text-center font-semibold">Sign in with Auth0</Text>
+              )}
+            </TouchableOpacity>
 
             <TouchableOpacity
               onPress={() => navigation.navigate('ForgotPassword')}
               className="self-end"
+              disabled={loading}
             >
               <Text className="text-primary">Forgot Password?</Text>
             </TouchableOpacity>
-
-            <TouchableOpacity
-              onPress={handleLogin}
-              className="bg-primary py-3 rounded-lg"
-            >
-              <Text className="text-white text-center font-semibold">Login</Text>
-            </TouchableOpacity>
-
-            <View className="flex-row justify-center mt-4">
-              <Text className="text-gray-600">Don't have an account? </Text>
-              <TouchableOpacity onPress={() => navigation.navigate('Register')}>
-                <Text className="text-primary font-semibold">Sign Up</Text>
-              </TouchableOpacity>
-            </View>
           </View>
         </View>
       </ScrollView>

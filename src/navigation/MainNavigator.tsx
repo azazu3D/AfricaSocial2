@@ -6,6 +6,8 @@ import CalendarNavigator from './CalendarNavigator';
 import InboxNavigator from './InboxNavigator';
 import MediaNavigator from './MediaNavigator';
 import ProfileScreen from '../screens/ProfileScreen';
+import { FileScreen } from '../screens/FileScreen';
+import { Ionicons } from '@expo/vector-icons';
 
 const Tab = createBottomTabNavigator<MainTabParamList>();
 
@@ -23,7 +25,9 @@ export default function MainNavigator() {
         component={DashboardNavigator}
         options={{
           tabBarLabel: 'Dashboard',
-          // TODO: Add icons
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="home-outline" size={size} color={color} />
+          ),
         }}
       />
       <Tab.Screen
@@ -31,7 +35,9 @@ export default function MainNavigator() {
         component={CalendarNavigator}
         options={{
           tabBarLabel: 'Calendar',
-          // TODO: Add icons
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="calendar-outline" size={size} color={color} />
+          ),
         }}
       />
       <Tab.Screen
@@ -39,7 +45,9 @@ export default function MainNavigator() {
         component={InboxNavigator}
         options={{
           tabBarLabel: 'Inbox',
-          // TODO: Add icons
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="mail-outline" size={size} color={color} />
+          ),
         }}
       />
       <Tab.Screen
@@ -47,7 +55,19 @@ export default function MainNavigator() {
         component={MediaNavigator}
         options={{
           tabBarLabel: 'Media',
-          // TODO: Add icons
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="images-outline" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Files"
+        component={FileScreen}
+        options={{
+          tabBarLabel: 'Files',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="document-outline" size={size} color={color} />
+          ),
         }}
       />
       <Tab.Screen
@@ -55,7 +75,9 @@ export default function MainNavigator() {
         component={ProfileScreen}
         options={{
           tabBarLabel: 'Profile',
-          // TODO: Add icons
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="person-outline" size={size} color={color} />
+          ),
         }}
       />
     </Tab.Navigator>
